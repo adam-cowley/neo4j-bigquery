@@ -1,0 +1,39 @@
+group 'org.neo4j'
+version '1.0-SNAPSHOT'
+
+
+buildscript {
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath 'com.github.jengelman.gradle.plugins:shadow:2.0.4'
+    }
+}
+
+apply plugin: 'java'
+apply plugin: 'com.github.johnrengelman.shadow'
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+
+repositories {
+    mavenCentral()
+}
+
+project.ext {
+    neo4j_version = "3.4.0"
+}
+
+dependencies {
+    compile 'com.google.cloud:google-cloud-bigquery:1.35.0'
+    compileOnly group: "org.neo4j", name:"neo4j", version: project.neo4j_version
+
+    testCompile group: 'org.neo4j.test', name: 'neo4j-harness', version: project.neo4j_version
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+}
+
+shadowJar {
+    exclude 'module-info.class'
+}

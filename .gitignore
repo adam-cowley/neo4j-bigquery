@@ -1,0 +1,6 @@
+src/main/resources/service_account.json
+build/
+.gradle/
+.idea/
+gradle/
+out/
