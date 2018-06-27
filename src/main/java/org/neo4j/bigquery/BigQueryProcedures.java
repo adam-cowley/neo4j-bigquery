@@ -71,17 +71,17 @@ public class BigQueryProcedures
     private BigQuery getService() {
         Map<String, String> params = db.getDependencyResolver().resolveDependency(Config.class).getRaw();
 
-        String credentialsPathname = params.get("bigquery.credentials");
+        String credentialsFile = params.get("bigquery.key_file");
         String projectId = params.get("bigquery.project_id");
 
         GoogleCredentials credentials;
-        File credentialsPath = new File(credentialsPathname);
+        File credentialsPath = new File(credentialsFile);
 
         try ( FileInputStream serviceAccountStream = new FileInputStream(credentialsPath) ) {
             credentials = ServiceAccountCredentials.fromStream(serviceAccountStream);
         }
         catch ( Exception e) {
-            throw new RuntimeException( "Could not load credentials file "+ credentialsPathname );
+            throw new RuntimeException( "Could not load credentials file "+ credentialsFile );
         }
 
         return BigQueryOptions.newBuilder()
@@ -121,7 +121,6 @@ public class BigQueryProcedures
 
     private Map<String, Object> toMap( FieldValueList row, FieldList fields ) {
         Map<String, Object> output = new HashMap<>();
-
 
         for ( int i = 0; i < fields.size(); i++ ) {
             String key = fields.get(i).getName();
